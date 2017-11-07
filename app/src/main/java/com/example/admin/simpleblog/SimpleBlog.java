@@ -42,7 +42,7 @@ public class SimpleBlog extends AppCompatActivity {
 
                 if (firebaseAuth.getCurrentUser() == null) {
 
-                    Intent loginIntent = new Intent(SimpleBlog.this, RegisterActivity.class);
+                    Intent loginIntent = new Intent(SimpleBlog.this, LoginActivity.class);
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(loginIntent);
 
