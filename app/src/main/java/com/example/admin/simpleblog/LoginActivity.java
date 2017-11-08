@@ -1,5 +1,6 @@
 package com.example.admin.simpleblog;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +29,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private DatabaseReference mDatabase;
+    private ProgressDialog mProgress;
+
+    private DatabaseReference mDatabaseUsers;
 
 
     @Override
@@ -38,7 +41,10 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        mProgress = new ProgressDialog(this);
+
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabaseUsers.keepSynced(true);
 
         mloginemailField = (EditText) findViewById(R.id.loginemailField);
         mloginpasswordField = (EditText) findViewById(R.id.loginpasswordField);
@@ -61,15 +67,22 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
+            mProgress.setMessage("Checking Login ...");
+            mProgress.show();
+
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                     if (task.isSuccessful()){
 
+                        mProgress.dismiss();
+
                         checkUserExist();
 
                     } else {
+
+                        mProgress.dismiss();
                         Toast.makeText(LoginActivity.this, "Error Login", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -81,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final String user_id = mAuth.getCurrentUser().getUid();
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -92,7 +105,11 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(mainIntent);
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "You need to set up your account.", Toast.LENGTH_LONG).show();
+
+                    Intent setupIntent = new Intent(LoginActivity.this, SetupActivity.class);
+                    setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(setupIntent);
+
                 }
 
             }
