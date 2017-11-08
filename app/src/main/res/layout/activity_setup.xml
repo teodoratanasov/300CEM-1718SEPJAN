@@ -25,7 +25,7 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Display Name" />
+        android:text="Enter Display Name" />
 
     <Button
         android:id="@+id/SetupSubmitBtn"
