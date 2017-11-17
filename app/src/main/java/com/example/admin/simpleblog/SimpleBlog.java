@@ -66,14 +66,15 @@ public class SimpleBlog extends AppCompatActivity {
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
 
+        checkUserExist();
+
+
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        checkUserExist();
 
         mAuth.addAuthStateListener(mAuthListener);
 
