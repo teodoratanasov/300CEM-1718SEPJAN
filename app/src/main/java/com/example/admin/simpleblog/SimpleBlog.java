@@ -102,29 +102,31 @@ public class SimpleBlog extends AppCompatActivity {
 
     private void checkUserExist() {
 
-        final String user_id = mAuth.getCurrentUser().getUid();
+        if (mAuth.getCurrentUser() != null) {
 
-        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            final String user_id = mAuth.getCurrentUser().getUid();
 
-                if (dataSnapshot.hasChild(user_id)) {
+            mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    Intent setupIntent = new Intent(SimpleBlog.this, SetupActivity.class);
-                    setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(setupIntent);
+                    if (!dataSnapshot.hasChild(user_id)) {
+
+                        Intent setupIntent = new Intent(SimpleBlog.this, SetupActivity.class);
+                        setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(setupIntent);
+
+                    }
 
                 }
 
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        }
     }
-
 
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder{
