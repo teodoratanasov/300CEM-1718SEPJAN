@@ -1,4 +1,4 @@
-package com.example.admin.simpleblog;
+package com.example.admin.restaurantapp;
 
 import org.junit.Test;
 

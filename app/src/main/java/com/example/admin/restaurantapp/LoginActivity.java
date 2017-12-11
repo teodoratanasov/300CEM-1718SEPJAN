@@ -1,4 +1,4 @@
-package com.example.admin.simpleblog;
+package com.example.admin.restaurantapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -204,7 +204,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (dataSnapshot.hasChild(user_id)){
 
-                    Intent mainIntent = new Intent(LoginActivity.this, SimpleBlog.class);
+                    Intent mainIntent = new Intent(LoginActivity.this, RestaurantApp.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(mainIntent);
 

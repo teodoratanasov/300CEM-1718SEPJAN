@@ -1,4 +1,4 @@
-package com.example.admin.simpleblog;
+package com.example.admin.restaurantapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         mProgress.dismiss();
 
-                        Intent mainIntent = new Intent(RegisterActivity.this, SimpleBlog.class);
+                        Intent mainIntent = new Intent(RegisterActivity.this, RestaurantApp.class);
                         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(mainIntent);
 

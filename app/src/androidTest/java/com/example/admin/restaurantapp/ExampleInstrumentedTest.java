@@ -1,4 +1,4 @@
-package com.example.admin.simpleblog;
+package com.example.admin.restaurantapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

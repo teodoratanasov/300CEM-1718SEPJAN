@@ -1,4 +1,4 @@
-package com.example.admin.simpleblog;
+package com.example.admin.restaurantapp;
 
 /**
  * Created by Admin on 6.11.2017 г..

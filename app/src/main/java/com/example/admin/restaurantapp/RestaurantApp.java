@@ -1,4 +1,4 @@
-package com.example.admin.simpleblog;
+package com.example.admin.restaurantapp;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,9 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import static com.example.admin.simpleblog.R.id.post_title;
-
-public class SimpleBlog extends AppCompatActivity {
+public class RestaurantApp extends AppCompatActivity {
 
     private RecyclerView mBlogList;
 
@@ -48,7 +46,7 @@ public class SimpleBlog extends AppCompatActivity {
 
                 if (firebaseAuth.getCurrentUser() == null) {
 
-                    Intent loginIntent = new Intent(SimpleBlog.this, LoginActivity.class);
+                    Intent loginIntent = new Intent(RestaurantApp.this, LoginActivity.class);
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(loginIntent);
 
@@ -93,6 +91,15 @@ public class SimpleBlog extends AppCompatActivity {
                 viewHolder.setImage(getApplicationContext(), model.getImage());
                 viewHolder.setUsername(model.getUsername());
 
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Toast.makeText(RestaurantApp.this, "You clicked on the View", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
             }
         };
 
@@ -113,7 +120,7 @@ public class SimpleBlog extends AppCompatActivity {
 
                     if (!dataSnapshot.hasChild(user_id)) {
 
-                        Intent setupIntent = new Intent(SimpleBlog.this, SetupActivity.class);
+                        Intent setupIntent = new Intent(RestaurantApp.this, SetupActivity.class);
                         setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(setupIntent);
 
@@ -181,7 +188,7 @@ public class SimpleBlog extends AppCompatActivity {
 
         if(item.getItemId() == R.id.action_add){
 
-            startActivity(new Intent(SimpleBlog.this, PostActivity.class));
+            startActivity(new Intent(RestaurantApp.this, PostActivity.class));
         }
 
         if (item.getItemId() == R.id.action_logout){

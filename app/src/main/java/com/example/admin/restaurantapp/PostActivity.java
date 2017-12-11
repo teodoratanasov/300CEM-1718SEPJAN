@@ -1,4 +1,4 @@
-package com.example.admin.simpleblog;
+package com.example.admin.restaurantapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -25,8 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import static android.R.attr.data;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -134,7 +132,7 @@ public class PostActivity extends AppCompatActivity {
 
                                     if (task.isSuccessful()){
 
-                                        startActivity(new Intent(PostActivity.this, SimpleBlog.class));
+                                        startActivity(new Intent(PostActivity.this, RestaurantApp.class));
                                     }
 
                                 }
