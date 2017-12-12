@@ -48,7 +48,7 @@ public class RestaurantApp extends AppCompatActivity {
 
                 if (firebaseAuth.getCurrentUser() == null) {
 
-                    Intent loginIntent = new Intent(RestaurantApp.this, RegisterForm.class);
+                    Intent loginIntent = new Intent(RestaurantApp.this, LoginForm.class);
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(loginIntent);
 
