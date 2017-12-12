@@ -23,19 +23,19 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class AccountForm extends AppCompatActivity {
 
-    private ImageButton mSetupImageBtn;
-    private EditText mNameField;
-    private Button mSubmitBtn;
+    private ImageButton nImageSetup;
+    private EditText nFieldName;
+    private Button nSetupButton;
 
-    private Uri mImageUri = null;
+    private Uri nImageUri = null;
 
-    private DatabaseReference mDatabaseUsers;
+    private DatabaseReference nDatabaseusers;
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth nAuthentication;
 
-    private StorageReference mStorageImage;
+    private StorageReference nStoreImage;
 
-    private ProgressDialog mProgress;
+    private ProgressDialog nProgressDialog;
 
     private static final int GALLERY_REQUEST = 1;
 
@@ -44,19 +44,29 @@ public class AccountForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_form);
 
-        mAuth = FirebaseAuth.getInstance();
+        /*
+        connecting to the database
+         */
 
-        mStorageImage = FirebaseStorage.getInstance().getReference().child("Profile_images");
+        nAuthentication = FirebaseAuth.getInstance();
+        /*
+        storing the profile picture in the database
+         */
 
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        nStoreImage = FirebaseStorage.getInstance().getReference().child("Profile_images");
+        /*
+        storing the users in the database
+         */
 
-        mProgress = new ProgressDialog(this);
+        nDatabaseusers = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        mSetupImageBtn = (ImageButton) findViewById(R.id.SetupImageBtn);
-        mNameField = (EditText) findViewById(R.id.SetupNameField);
-        mSubmitBtn = (Button) findViewById(R.id.SetupSubmitBtn);
+        nProgressDialog = new ProgressDialog(this);
 
-        mSubmitBtn.setOnClickListener(new View.OnClickListener() {
+        nImageSetup = (ImageButton) findViewById(R.id.ImageButton);
+        nFieldName = (EditText) findViewById(R.id.NameField);
+        nSetupButton = (Button) findViewById(R.id.SubmitButton);
+
+        nSetupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -64,8 +74,11 @@ public class AccountForm extends AppCompatActivity {
 
             }
         });
+        /*
+        using the gallery request to open gallery to upload image
+         */
 
-        mSetupImageBtn.setOnClickListener(new View.OnClickListener() {
+        nImageSetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -81,27 +94,30 @@ public class AccountForm extends AppCompatActivity {
 
     private void startSetupAccount() {
 
-        final String name = mNameField.getText().toString().trim();
+        final String name = nFieldName.getText().toString().trim();
 
-        final String user_id = mAuth.getCurrentUser().getUid();
+        final String user_id = nAuthentication.getCurrentUser().getUid();
 
-        if (!TextUtils.isEmpty(name) && mImageUri != null) {
+        if (!TextUtils.isEmpty(name) && nImageUri != null) {
 
-            mProgress.setMessage("Finishing Setup ...");
-            mProgress.show();
+            nProgressDialog.setMessage("Finishing Setup ...");
+            nProgressDialog.show();
 
-            StorageReference filepath = mStorageImage.child(mImageUri.getLastPathSegment());
+            StorageReference filepath = nStoreImage.child(nImageUri.getLastPathSegment());
 
-            filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            filepath.putFile(nImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                     String downloadUri = taskSnapshot.getDownloadUrl().toString();
 
-                    mDatabaseUsers.child(user_id).child("name").setValue(name);
-                    mDatabaseUsers.child(user_id).child("image").setValue(downloadUri);
+                    nDatabaseusers.child(user_id).child("name").setValue(name);
+                    nDatabaseusers.child(user_id).child("image").setValue(downloadUri);
 
-                    mProgress.dismiss();
+                    nProgressDialog.dismiss();
+                    /*
+                    redirecting to post page
+                     */
 
                     Intent mainIntent = new Intent(AccountForm.this, RestaurantApp.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -117,6 +133,12 @@ public class AccountForm extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        /*
+        adding the crop image tool in order the user to crop his profile picture
+
+         */
+
+
         if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK){
 
             Uri imageUri = data.getData();
@@ -128,12 +150,13 @@ public class AccountForm extends AppCompatActivity {
 
         }
 
+
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                mImageUri = result.getUri();
+                nImageUri = result.getUri();
 
-                mSetupImageBtn.setImageURI(mImageUri);
+                nImageSetup.setImageURI(nImageUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }

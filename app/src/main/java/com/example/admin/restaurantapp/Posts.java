@@ -5,9 +5,11 @@ package com.example.admin.restaurantapp;
  */
 
 public class Posts {
-
+   /*
+   setting some variables for the title,description,image and username
+    */
     private String title;
-    private String desc;
+    private String description;
     private String image;
 
     private String username;
@@ -18,10 +20,13 @@ public class Posts {
 
     public Posts(String title, String desc, String image) {
         this.title = title;
-        this.desc = desc;
+        this.description = desc;
         this.image = image;
         this.username = username;
     }
+    /*
+    displaying the title
+     */
 
     public String getTitle() {
         return title;
@@ -30,15 +35,19 @@ public class Posts {
     public void setTitle(String title) {
         this.title = title;
     }
-
+    /*
+    displaying the description
+     */
     public String getDesc() {
-        return desc;
+        return description;
     }
 
     public void setDesc(String desc) {
-        this.desc = desc;
+        this.description = desc;
     }
-
+    /*
+    displaying the image
+     */
     public String getImage() {
         return image;
     }
@@ -46,7 +55,9 @@ public class Posts {
     public void setImage(String image) {
         this.image = image;
     }
-
+    /*
+    displaying the username
+     */
     public String getUsername() {
         return username;
     }

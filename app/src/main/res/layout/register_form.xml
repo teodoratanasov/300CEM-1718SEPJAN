@@ -7,7 +7,7 @@
     tools:context="com.example.admin.restaurantapp.RegisterForm">
 
     <EditText
-        android:id="@+id/nameField"
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -17,33 +17,33 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/loginBtn"
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Email..."
         android:inputType="textEmailAddress"
-        android:layout_below="@+id/nameField"
+        android:layout_below="@+id/name"
         android:layout_alignParentStart="true"
         android:layout_marginTop="12dp" />
 
     <EditText
-        android:id="@+id/passwordField"
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Password..."
         android:inputType="textPassword"
-        android:layout_below="@+id/loginBtn"
+        android:layout_below="@+id/email"
         android:layout_alignParentStart="true"
         android:layout_marginTop="16dp" />
 
     <Button
-        android:id="@+id/registerBtn"
+        android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/password"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="42dp"
-        android:text="Register"
-        android:layout_below="@+id/passwordField"
-        android:layout_centerHorizontal="true" />
+        android:text="Register" />
 </RelativeLayout>

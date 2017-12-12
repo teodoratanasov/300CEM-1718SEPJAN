@@ -18,35 +18,42 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterForm extends AppCompatActivity {
+    /*
+    setting the different text fields and buttons
+     */
 
-    private EditText mNameField;
-    private EditText mEmailField;
-    private EditText mPasswordField;
+    private EditText nNameField;
+    private EditText nEmailField;
+    private EditText nPasswordField;
 
-    private Button mRegisterBtn;
-    private DatabaseReference mDatabase;
+    private Button nRegisterButton;
+    private DatabaseReference nDatabasereference;
 
-    private FirebaseAuth mAuth;
-    private ProgressDialog mProgress;
+    private FirebaseAuth nAuthentication;
+    private ProgressDialog nProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_form);
+        /*
+        fetching information from the database
+         */
 
-        mAuth = FirebaseAuth.getInstance();
+        nAuthentication = FirebaseAuth.getInstance();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        nDatabasereference = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        mProgress = new ProgressDialog(this);
+        nProgressDialog = new ProgressDialog(this);
 
-        mNameField = (EditText) findViewById(R.id.nameField);
-        mEmailField = (EditText) findViewById(R.id.loginBtn);
-        mPasswordField = (EditText) findViewById(R.id.passwordField);
 
-        mRegisterBtn = (Button) findViewById(R.id.registerBtn);
+        nNameField = (EditText) findViewById(R.id.name);
+        nEmailField = (EditText) findViewById(R.id.email);
+        nPasswordField = (EditText) findViewById(R.id.password);
 
-        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
+        nRegisterButton = (Button) findViewById(R.id.registerButton);
+
+        nRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -58,32 +65,52 @@ public class RegisterForm extends AppCompatActivity {
 
     private void startRegister() {
 
-        final String name = mNameField.getText().toString().trim();
-        String email = mEmailField.getText().toString().trim();
-        String password = mPasswordField.getText().toString().trim();
+        /*
+        get the text from the text boxes
+         */
+
+        final String name = nNameField.getText().toString().trim();
+        String email = nEmailField.getText().toString().trim();
+        String password = nPasswordField.getText().toString().trim();
+        /*
+        check if fields are empty
+         */
 
         if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+            /*
+            show a process dialog when registering
+             */
 
-            mProgress.setMessage("Registring...");
-            mProgress.show();
+            nProgressDialog.setMessage("Registering...");
+            nProgressDialog.show();
+            /*
 
-            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+             */
+
+            nAuthentication.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                     if (task.isSuccessful()) {
 
-                        String user_id = mAuth.getCurrentUser().getUid();
+                        /*
+                        if task is successfull add data to the database
+                         */
 
-                        DatabaseReference current_user_db = mDatabase.child(user_id);
+                        String user_id = nAuthentication.getCurrentUser().getUid();
+
+                        DatabaseReference current_user_db = nDatabasereference.child(user_id);
                         current_user_db.child("name").setValue(name);
                         current_user_db.child("image").setValue("default");
 
-                        mProgress.dismiss();
+                        nProgressDialog.dismiss();
+                        /*
+                        redirect to the login form
+                         */
 
-                        Intent mainIntent = new Intent(RegisterForm.this, RestaurantApp.class);
-                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(mainIntent);
+                        Intent loginIntent = new Intent(RegisterForm.this, LoginForm.class);
+                        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(loginIntent);
 
                     }
                 }

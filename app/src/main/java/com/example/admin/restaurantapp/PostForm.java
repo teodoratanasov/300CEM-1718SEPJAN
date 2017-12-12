@@ -58,7 +58,7 @@ public class PostForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_form);
         /*
-        code using the camera by clocking the Take a Photo button
+        code using the camera by clicking the Take a Photo button
          */
 
         Button pictureBtn = (Button)findViewById(R.id.pictureBtn);
@@ -73,7 +73,11 @@ public class PostForm extends AppCompatActivity {
 
         nAuthentication = FirebaseAuth.getInstance();
 
+
         nUser = nAuthentication.getCurrentUser();
+        /*
+        connecting to the database and storing the information of the posts and the users
+         */
 
         nStorageindatabase = FirebaseStorage.getInstance().getReference();
         nDatabase = FirebaseDatabase.getInstance().getReference().child("Posts");
@@ -150,6 +154,9 @@ public class PostForm extends AppCompatActivity {
                     nDatabaseUser.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            /*
+                            adding information to the database title,description,image,userid,username
+                             */
 
                             newPost.child("title").setValue(title_val);
                             newPost.child("desc").setValue(desc_val);

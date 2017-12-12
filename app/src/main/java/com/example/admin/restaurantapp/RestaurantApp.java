@@ -48,7 +48,7 @@ public class RestaurantApp extends AppCompatActivity {
 
                 if (firebaseAuth.getCurrentUser() == null) {
 
-                    Intent loginIntent = new Intent(RestaurantApp.this, LoginForm.class);
+                    Intent loginIntent = new Intent(RestaurantApp.this, RegisterForm.class);
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(loginIntent);
 
@@ -109,7 +109,9 @@ public class RestaurantApp extends AppCompatActivity {
 
 
     }
-
+    /*
+    check if the user exists
+     */
     private void checkUserExist() {
 
         if (nAuthentication.getCurrentUser() != null) {
@@ -122,7 +124,7 @@ public class RestaurantApp extends AppCompatActivity {
 
                     if (!dataSnapshot.hasChild(user_id)) {
 
-                        Intent setupIntent = new Intent(RestaurantApp.this, AccountForm.class);
+                        Intent setupIntent = new Intent(RestaurantApp.this, RegisterForm.class);
                         setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(setupIntent);
 

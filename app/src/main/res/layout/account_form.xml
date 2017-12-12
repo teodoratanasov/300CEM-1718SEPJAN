@@ -7,7 +7,7 @@
     tools:context="com.example.admin.restaurantapp.AccountForm">
 
     <ImageButton
-        android:id="@+id/SetupImageBtn"
+        android:id="@+id/ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -15,11 +15,11 @@
         app:srcCompat="@mipmap/blank_user" />
 
     <EditText
-        android:id="@+id/SetupNameField"
+        android:id="@+id/NameField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/SetupImageBtn"
+        android:layout_below="@+id/ImageButton"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
@@ -28,7 +28,7 @@
         android:text="Enter Display Name" />
 
     <Button
-        android:id="@+id/SetupSubmitBtn"
+        android:id="@+id/SubmitButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

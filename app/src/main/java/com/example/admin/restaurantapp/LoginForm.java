@@ -33,17 +33,22 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginForm extends AppCompatActivity {
 
-    private EditText mloginemailField;
-    private EditText mloginpasswordField;
-    private Button mloginBtn;
+    /*
+    setting some variables for the different functions
+     */
 
-    private FirebaseAuth mAuth;
+    private EditText nloginEmailField;
+    private EditText nloginPasswordField;
+    private Button nloginButton;
+    private Button nregisterButton;
 
-    private ProgressDialog mProgress;
+    private FirebaseAuth nAuthentication;
 
-    private DatabaseReference mDatabaseUsers;
+    private ProgressDialog nProgress;
 
-    private SignInButton mGoogleBtn;
+    private DatabaseReference nDatabaseUser;
+
+    private SignInButton nGoogleButton;
 
     private static final int RC_SIGN_IN = 1;
 
@@ -57,20 +62,31 @@ public class LoginForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_form);
 
-        mAuth = FirebaseAuth.getInstance();
+        nAuthentication = FirebaseAuth.getInstance();
 
-        mProgress = new ProgressDialog(this);
+        nProgress = new ProgressDialog(this);
 
-        mGoogleBtn = (SignInButton) findViewById(R.id.googleBtn);
+        nGoogleButton = (SignInButton) findViewById(R.id.googleBtn);
 
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mDatabaseUsers.keepSynced(true);
+        nDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users");
+        nDatabaseUser.keepSynced(true);
 
-        mloginemailField = (EditText) findViewById(R.id.loginemailField);
-        mloginpasswordField = (EditText) findViewById(R.id.loginpasswordField);
-        mloginBtn = (Button) findViewById(R.id.loginBtn);
+        nloginEmailField = (EditText) findViewById(R.id.loginemailField);
+        nloginPasswordField = (EditText) findViewById(R.id.loginpasswordField);
+        nloginButton = (Button) findViewById(R.id.email);
+        nregisterButton = (Button) findViewById(R.id.button3);
 
-        mloginBtn.setOnClickListener(new View.OnClickListener() {
+        nregisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent registerIntent = new Intent(LoginForm.this, RegisterForm.class);
+                registerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(registerIntent);
+            }
+        });
+
+        nloginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -95,7 +111,7 @@ public class LoginForm extends AppCompatActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        mGoogleBtn.setOnClickListener(new View.OnClickListener() {
+        nGoogleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -120,15 +136,15 @@ public class LoginForm extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
-            mProgress.setMessage("Starting Sign in...");
-            mProgress.show();
+            nProgress.setMessage("Starting Sign in...");
+            nProgress.show();
 
             if(result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
 
-                mProgress.dismiss();
+                nProgress.dismiss();
 
 
                 // ...
@@ -140,7 +156,7 @@ public class LoginForm extends AppCompatActivity {
         Log.d(TAG, "firebaseAuthWithGoogle:" + accct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(accct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
+        nAuthentication.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -152,7 +168,7 @@ public class LoginForm extends AppCompatActivity {
 
                         } else {
 
-                            mProgress.dismiss();
+                            nProgress.dismiss();
 
                             checkUserExist();
                         }
@@ -166,27 +182,27 @@ public class LoginForm extends AppCompatActivity {
 
     private void checkLogin() {
 
-        String email = mloginemailField.getText().toString().trim();
-        String password = mloginpasswordField.getText().toString().trim();
+        String email = nloginEmailField.getText().toString().trim();
+        String password = nloginPasswordField.getText().toString().trim();
 
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
-            mProgress.setMessage("Checking Login ...");
-            mProgress.show();
+            nProgress.setMessage("Checking Login ...");
+            nProgress.show();
 
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            nAuthentication.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                     if (task.isSuccessful()){
 
-                        mProgress.dismiss();
+                        nProgress.dismiss();
 
                         checkUserExist();
 
                     } else {
 
-                        mProgress.dismiss();
+                        nProgress.dismiss();
                         Toast.makeText(LoginForm.this, "Error Login", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -196,9 +212,9 @@ public class LoginForm extends AppCompatActivity {
 
     private void checkUserExist() {
 
-        final String user_id = mAuth.getCurrentUser().getUid();
+        final String user_id = nAuthentication.getCurrentUser().getUid();
 
-        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+        nDatabaseUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

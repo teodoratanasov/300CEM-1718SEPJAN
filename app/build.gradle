@@ -27,6 +27,7 @@ android {
  adding cardview and recycler view
  adding picasso to view images http://square.github.io/picasso/
  adding cropper for the user profile picture https://github.com/ArthurHub/Android-Image-Cropper
+ adding google login
  */
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
