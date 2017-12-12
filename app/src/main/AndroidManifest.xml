@@ -20,10 +20,10 @@
         </activity>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
         android:theme="@style/Base.Theme.AppCompat"/>
-        <activity android:name="com.example.admin.restaurantapp.PostActivity" />
-        <activity android:name="com.example.admin.restaurantapp.RegisterActivity" />
-        <activity android:name="com.example.admin.restaurantapp.LoginActivity" />
-        <activity android:name="com.example.admin.restaurantapp.SetupActivity"></activity>
+        <activity android:name="com.example.admin.restaurantapp.PostForm" />
+        <activity android:name="com.example.admin.restaurantapp.RegisterForm" />
+        <activity android:name="com.example.admin.restaurantapp.LoginForm" />
+        <activity android:name="com.example.admin.restaurantapp.AccountForm"></activity>
     </application>
 
 </manifest>

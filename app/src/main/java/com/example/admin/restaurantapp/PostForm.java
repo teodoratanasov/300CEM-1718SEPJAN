@@ -3,6 +3,7 @@ package com.example.admin.restaurantapp;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,53 +27,71 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-public class PostActivity extends AppCompatActivity {
+public class PostForm extends AppCompatActivity {
 
-    private ImageButton mSelectImage;
-    private EditText mPostTitle;
-    private EditText mPostDesc;
+    private ImageButton nSelectedImage;
+    private EditText nPostingTitle;
+    private EditText nPostingDesc;
 
     private Button mSubmitBtn;
 
     private Uri mImageUri = null;
-    
+    /**
+     * Making a gallery request to fetch images
+     */
     private static final int GALLERY_REQUEST = 1;
 
-    private StorageReference mStorage;
-    private DatabaseReference mDatabase;
 
-    private ProgressDialog mProgress;
+    private StorageReference nStorageindatabase;
+    private DatabaseReference nDatabase;
 
-    private FirebaseAuth mAuth;
+    private ProgressDialog nProgressDialog;
 
-    private FirebaseUser mCurrentUser;
+    private FirebaseAuth nAuthentication;
 
-    private DatabaseReference mDatabaseUser;
+    private FirebaseUser nUser;
+
+    private DatabaseReference nDatabaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.post_form);
+        /*
+        code using the camera by clocking the Take a Photo button
+         */
 
-        mAuth = FirebaseAuth.getInstance();
+        Button pictureBtn = (Button)findViewById(R.id.pictureBtn);
 
-        mCurrentUser = mAuth.getCurrentUser();
+        pictureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
+            }
+        });
 
-        mStorage = FirebaseStorage.getInstance().getReference();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
+        nAuthentication = FirebaseAuth.getInstance();
 
-        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
+        nUser = nAuthentication.getCurrentUser();
 
-        mSelectImage = (ImageButton) findViewById(R.id.imageSelect);
+        nStorageindatabase = FirebaseStorage.getInstance().getReference();
+        nDatabase = FirebaseDatabase.getInstance().getReference().child("Posts");
 
-        mPostTitle = (EditText) findViewById(R.id.titleField);
-        mPostDesc = (EditText) findViewById(R.id.descField);
+        nDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(nUser.getUid());
+
+        nSelectedImage = (ImageButton) findViewById(R.id.imagePick);
+
+        nPostingTitle = (EditText) findViewById(R.id.titleField);
+        nPostingDesc = (EditText) findViewById(R.id.descField);
 
         mSubmitBtn = (Button) findViewById(R.id.submitBtn);
+        /**
+         * request images from gallery code
+         */
+        nProgressDialog = new ProgressDialog(this);
 
-        mProgress = new ProgressDialog(this);
-
-        mSelectImage.setOnClickListener(new View.OnClickListener() {
+        nSelectedImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -94,20 +113,30 @@ public class PostActivity extends AppCompatActivity {
             }
         });
     }
+    /*
+    Posting the post to the app
+     */
 
     private void startPosting() {
+        /*
+        adding a display dialog to show the progress of uploading the post to the app
+         */
 
-        mProgress.setMessage("Posting to Blog ...");
+        nProgressDialog.setMessage("Posting to App ...");
 
 
-        final String title_val = mPostTitle.getText().toString().trim();
-        final String desc_val = mPostDesc.getText().toString().trim();
+        final String title_val = nPostingTitle.getText().toString().trim();
+        final String desc_val = nPostingDesc.getText().toString().trim();
+
+        /*
+        check if the boxes are empty
+         */
 
         if (!TextUtils.isEmpty(title_val) && !TextUtils.isEmpty(desc_val) && mImageUri != null){
 
-            mProgress.show();
+            nProgressDialog.show();
 
-            StorageReference filepath = mStorage.child("Blog_Images").child(mImageUri.getLastPathSegment());
+            StorageReference filepath = nStorageindatabase.child("Blog_Images").child(mImageUri.getLastPathSegment());
 
             filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -115,24 +144,24 @@ public class PostActivity extends AppCompatActivity {
 
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    final DatabaseReference newPost = mDatabase.push();
+                    final DatabaseReference newPost = nDatabase.push();
 
 
-                    mDatabaseUser.addValueEventListener(new ValueEventListener() {
+                    nDatabaseUser.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             newPost.child("title").setValue(title_val);
                             newPost.child("desc").setValue(desc_val);
                             newPost.child("image").setValue(downloadUrl.toString());
-                            newPost.child("uid").setValue(mCurrentUser.getUid());
+                            newPost.child("uid").setValue(nUser.getUid());
                             newPost.child("username").setValue(dataSnapshot.child("name").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
 
                                     if (task.isSuccessful()){
 
-                                        startActivity(new Intent(PostActivity.this, RestaurantApp.class));
+                                        startActivity(new Intent(PostForm.this, RestaurantApp.class));
                                     }
 
                                 }
@@ -146,7 +175,7 @@ public class PostActivity extends AppCompatActivity {
                         }
                     });
 
-                    mProgress.dismiss();
+                    nProgressDialog.dismiss();
 
 
                 }
@@ -161,12 +190,14 @@ public class PostActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        
+        /**
+         * code for the gallery to get images from device and display
+         */
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
             
             mImageUri = data.getData();
             
-            mSelectImage.setImageURI(mImageUri);
+            nSelectedImage.setImageURI(mImageUri);
         }
     }
 }

@@ -24,29 +24,31 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class RestaurantApp extends AppCompatActivity {
+    /**
+     * making a recycle view for the
+     */
+    private RecyclerView nList;
 
-    private RecyclerView mBlogList;
+    private DatabaseReference nDatabase;
 
-    private DatabaseReference mDatabase;
+    private DatabaseReference nDatabaseUsers;
 
-    private DatabaseReference mDatabaseUsers;
-
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth nAuthentication;
+    private FirebaseAuth.AuthStateListener nAuthenticationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_blog);
+        setContentView(R.layout.activity_restaurantapp);
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+        nAuthentication = FirebaseAuth.getInstance();
+        nAuthenticationListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
                 if (firebaseAuth.getCurrentUser() == null) {
 
-                    Intent loginIntent = new Intent(RestaurantApp.this, LoginActivity.class);
+                    Intent loginIntent = new Intent(RestaurantApp.this, LoginForm.class);
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(loginIntent);
 
@@ -55,14 +57,14 @@ public class RestaurantApp extends AppCompatActivity {
 
         };
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        nDatabase = FirebaseDatabase.getInstance().getReference().child("Posts");
+        nDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        mDatabaseUsers.keepSynced(true);
+        nDatabaseUsers.keepSynced(true);
 
-        mBlogList = (RecyclerView) findViewById(R.id.blog_list);
-        mBlogList.setHasFixedSize(true);
-        mBlogList.setLayoutManager(new LinearLayoutManager(this));
+        nList = (RecyclerView) findViewById(R.id.post_list);
+        nList.setHasFixedSize(true);
+        nList.setLayoutManager(new LinearLayoutManager(this));
 
         checkUserExist();
 
@@ -74,28 +76,28 @@ public class RestaurantApp extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mAuth.addAuthStateListener(mAuthListener);
+        nAuthentication.addAuthStateListener(nAuthenticationListener);
 
-        FirebaseRecyclerAdapter<Blog, BlogViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Blog, BlogViewHolder>(
-                Blog.class,
-                R.layout.blog_row,
+        FirebaseRecyclerAdapter<Posts, BlogViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Posts, BlogViewHolder>(
+                Posts.class,
+                R.layout.posts,
                 BlogViewHolder.class,
-                mDatabase
+                nDatabase
 
         ) {
             @Override
-            protected void populateViewHolder(BlogViewHolder viewHolder, Blog model, int position) {
+            protected void populateViewHolder(BlogViewHolder viewHolder, Posts model, int position) {
 
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setDesc(model.getDesc());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
                 viewHolder.setUsername(model.getUsername());
 
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                viewHolder.nView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        Toast.makeText(RestaurantApp.this, "You clicked on the View", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RestaurantApp.this, "You clicked on the Post", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -103,24 +105,24 @@ public class RestaurantApp extends AppCompatActivity {
             }
         };
 
-        mBlogList.setAdapter(firebaseRecyclerAdapter);
+        nList.setAdapter(firebaseRecyclerAdapter);
 
 
     }
 
     private void checkUserExist() {
 
-        if (mAuth.getCurrentUser() != null) {
+        if (nAuthentication.getCurrentUser() != null) {
 
-            final String user_id = mAuth.getCurrentUser().getUid();
+            final String user_id = nAuthentication.getCurrentUser().getUid();
 
-            mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+            nDatabaseUsers.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     if (!dataSnapshot.hasChild(user_id)) {
 
-                        Intent setupIntent = new Intent(RestaurantApp.this, SetupActivity.class);
+                        Intent setupIntent = new Intent(RestaurantApp.this, AccountForm.class);
                         setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(setupIntent);
 
@@ -139,37 +141,52 @@ public class RestaurantApp extends AppCompatActivity {
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder{
 
-        View mView;
+        View nView;
 
 
         public BlogViewHolder(View itemView) {
             super(itemView);
 
-            mView = itemView;
+            nView = itemView;
         }
+        /*
+        displaying the title
+         */
 
         public void setTitle(String title){
 
-            TextView post_title = (TextView) mView.findViewById(R.id.post_title);
+            TextView post_title = (TextView) nView.findViewById(R.id.posts_title);
             post_title.setText(title);
         }
+        /*
+        displaying the description
+         */
 
         public void setDesc(String desc){
 
-            TextView post_desc = (TextView) mView.findViewById(R.id.post_desc);
+            TextView post_desc = (TextView) nView.findViewById(R.id.posts_description);
             post_desc.setText(desc);
         }
+        /*
+        displaying the user username
+         */
 
         public void setUsername(String username){
 
-            TextView post_username = (TextView) mView.findViewById(R.id.post_username);
+            TextView post_username = (TextView) nView.findViewById(R.id.posts_username);
             post_username.setText(username);
 
         }
 
+        /**
+         * Loading the images with picasso
+         * @param ctx
+         * @param image
+         */
+
         public void setImage(Context ctx, String image){
 
-            ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
+            ImageView post_image = (ImageView) nView.findViewById(R.id.posts_image);
             Picasso.with(ctx).load(image).into(post_image);
         }
     }
@@ -185,12 +202,16 @@ public class RestaurantApp extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+/**
+ * redirecting to post a blog after clicking add button
+ */
         if(item.getItemId() == R.id.action_add){
 
-            startActivity(new Intent(RestaurantApp.this, PostActivity.class));
+            startActivity(new Intent(RestaurantApp.this, PostForm.class));
         }
-
+/**
+ * performing log out after clicking the log out button
+ */
         if (item.getItemId() == R.id.action_logout){
 
             logout();
@@ -200,8 +221,10 @@ public class RestaurantApp extends AppCompatActivity {
     }
 
     private void logout() {
-
-        mAuth.signOut();
+/**
+ * ensuring that the user is singed out
+ */
+        nAuthentication.signOut();
     }
 }
 

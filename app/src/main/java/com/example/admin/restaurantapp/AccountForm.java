@@ -21,7 +21,7 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-public class SetupActivity extends AppCompatActivity {
+public class AccountForm extends AppCompatActivity {
 
     private ImageButton mSetupImageBtn;
     private EditText mNameField;
@@ -42,7 +42,7 @@ public class SetupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setup);
+        setContentView(R.layout.account_form);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -103,7 +103,7 @@ public class SetupActivity extends AppCompatActivity {
 
                     mProgress.dismiss();
 
-                    Intent mainIntent = new Intent(SetupActivity.this, RestaurantApp.class);
+                    Intent mainIntent = new Intent(AccountForm.this, RestaurantApp.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(mainIntent);
                 }

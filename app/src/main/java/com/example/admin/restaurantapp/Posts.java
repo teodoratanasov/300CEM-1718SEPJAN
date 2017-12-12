@@ -4,7 +4,7 @@ package com.example.admin.restaurantapp;
  * Created by Admin on 6.11.2017 г..
  */
 
-public class Blog {
+public class Posts {
 
     private String title;
     private String desc;
@@ -12,11 +12,11 @@ public class Blog {
 
     private String username;
 
-    public Blog(){
+    public Posts(){
 
     }
 
-    public Blog(String title, String desc, String image) {
+    public Posts(String title, String desc, String image) {
         this.title = title;
         this.desc = desc;
         this.image = image;

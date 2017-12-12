@@ -21,7 +21,13 @@ android {
         }
     }
 }
-
+/**
+ adding dependencies for the app
+ adding a firebase database,auth,storage and ui dependencies
+ adding cardview and recycler view
+ adding picasso to view images http://square.github.io/picasso/
+ adding cropper for the user profile picture https://github.com/ArthurHub/Android-Image-Cropper
+ */
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

@@ -31,7 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginForm extends AppCompatActivity {
 
     private EditText mloginemailField;
     private EditText mloginpasswordField;
@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 1;
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "LoginForm";
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.login_form);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "signInWithCredential:onComplete"+ task.isSuccessful());
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginForm.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
                         } else {
@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
 
                         mProgress.dismiss();
-                        Toast.makeText(LoginActivity.this, "Error Login", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginForm.this, "Error Login", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -204,13 +204,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (dataSnapshot.hasChild(user_id)){
 
-                    Intent mainIntent = new Intent(LoginActivity.this, RestaurantApp.class);
+                    Intent mainIntent = new Intent(LoginForm.this, RestaurantApp.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(mainIntent);
 
                 } else {
 
-                    Intent setupIntent = new Intent(LoginActivity.this, SetupActivity.class);
+                    Intent setupIntent = new Intent(LoginForm.this, AccountForm.class);
                     setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(setupIntent);
 

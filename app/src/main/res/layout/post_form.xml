@@ -8,14 +8,14 @@
 
 
     <ImageButton
-        android:id="@+id/imageSelect"
+        android:id="@+id/imagePick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:background="@color/colorAccent"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:src="@mipmap/add_btn" />
 
     <EditText
@@ -36,23 +36,36 @@
     <EditText
         android:id="@+id/descField"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/titleField"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/input_outline"
-        android:ems="10"
-        android:hint="   Post Description ..."
+        android:padding="15dp"
+        android:hint="Post Description ..."
         android:inputType="textMultiLine" />
 
     <Button
         android:id="@+id/submitBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/descField"
+        android:layout_marginTop="21dp"
         android:background="@color/colorPrimary"
         android:text="Submit Post"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/pictureBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@android:color/holo_orange_dark"
+        android:text="Take A Photo"
         android:textColor="@android:color/white" />
 </RelativeLayout>
